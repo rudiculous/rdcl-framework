@@ -1,0 +1,35 @@
+{
+  "name": "@rdcl/framework",
+  "version": "1.0.0",
+  "description": "A web framework based on Koa.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rudiculous/rdcl-framework.git"
+  },
+  "author": "RJ van der Weide <rj@rudiculous.net> (http://rdcl.nl)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rudiculous/rdcl-framework/issues"
+  },
+  "homepage": "https://github.com/rudiculous/rdcl-framework#readme",
+  "dependencies": {
+    "@rdcl/logger": "~1.0.x",
+    "chalk": "~1.0.x",
+    "co": "~4.5.x",
+    "js-yaml": "~3.3.x",
+    "koa": "~0.20.x",
+    "koa-bodyparser": "~1.6.x",
+    "koa-router": "~4.3.x",
+    "koa-static": "~1.4.x",
+    "koa-swig": "~2.0.x",
+    "moment": "~2.10.x",
+    "yargs": "~3.8.x"
+  },
+  "engines": {
+    "iojs": "2.0.x"
+  }
+}
