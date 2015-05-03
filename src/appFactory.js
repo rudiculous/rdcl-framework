@@ -120,6 +120,52 @@ function __setupLogger(app, logLevel) {
 }
 
 function __setupTemplateParser(root, app) {
+
+    let filters = {
+        money: function money(amount, options) {
+            if (options == null) options = {};
+            let decimal = options.decimal || '.';
+            let grouping = options.grouping || '';
+
+            amount = String(Math.round(100 * Number(amount)));
+
+            if (amount.match(/\d{3,}$/)) {
+                let pivot = amount.length - 2;
+                let integerPart = amount.substring(0, pivot);
+                let grouped = '';
+
+                for (let i = integerPart.length; i > 0; i -= 3) {
+                    grouped =
+                        integerPart.substring(i < 3 ? 0 : (i - 3), i) +
+                        (grouped ? grouping + grouped : '');
+                }
+
+                amount = grouped + decimal + amount.substring(pivot);
+            }
+            else {
+                if (!amount.match(/\d{2,}$/)) {
+                    amount = '0' + amount;
+                }
+
+                amount = '0' + decimal + amount;
+            }
+
+            return amount;
+        },
+    };
+
+    Object.defineProperty(app, 'filters', {
+        enumerable: true,
+        get: function getFilters() {
+            return filters;
+        },
+        set: function setFilters(val) {
+            Object.keys(val).forEach(function (key) {
+                filters[key] = val[key];
+            });
+        },
+    });
+
     let locals = {
         'config': app.config,
         'moment': moment,
@@ -145,14 +191,14 @@ function __setupTemplateParser(root, app) {
     Object.defineProperty(app.context, 'locals', props);
 
     app.context.render = render({
-        'root': path.join(root, 'views'),
-        //'autoescape': true,
-        //'cache': 'memory',
-        'ext': 'swig.html',
-        'locals': locals,
-        //'filters': filters,
-        //'tags': tags,
-        //'extensions': extensions,
+        root: path.join(root, 'views'),
+        autoescape: true,
+        //cache: 'memory',
+        ext: 'swig.html',
+        locals,
+        filters,
+        //tags: tags,
+        //extensions: extensions,
     });
 }
 
