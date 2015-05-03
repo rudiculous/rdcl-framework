@@ -144,7 +144,7 @@ function __setupTemplateParser(root, app) {
     Object.defineProperty(app, 'locals', props);
     Object.defineProperty(app.context, 'locals', props);
 
-    render(app, {
+    app.context.render = render({
         'root': path.join(root, 'views'),
         //'autoescape': true,
         //'cache': 'memory',

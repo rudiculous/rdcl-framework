@@ -1,6 +1,6 @@
 {
   "name": "@rdcl/framework",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A web framework based on Koa.",
   "main": "index.js",
   "scripts": {
