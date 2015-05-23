@@ -167,6 +167,7 @@ function __setupTemplateParser(root, app) {
     });
 
     let locals = {
+        'environment': app.env,
         'config': app.config,
         'moment': moment,
     };
