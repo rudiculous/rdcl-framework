@@ -1,6 +1,6 @@
 {
   "name": "@rdcl/framework",
-  "version": "0.0.5",
+  "version": "0.1.6",
   "description": "A web framework based on Koa.",
   "main": "index.js",
   "scripts": {
@@ -21,13 +21,13 @@
     "chalk": "~1.0.x",
     "co": "~4.5.x",
     "js-yaml": "~3.3.x",
-    "koa": "~0.20.x",
-    "koa-bodyparser": "~1.6.x",
-    "koa-router": "~4.3.x",
+    "koa": "~0.21.x",
+    "koa-bodyparser": "~2.0.x",
+    "koa-router": "~5.0.x",
     "koa-static": "~1.4.x",
     "koa-swig": "~2.0.x",
     "moment": "~2.10.x",
-    "yargs": "~3.8.x"
+    "yargs": "~3.10.x"
   },
   "engines": {
     "iojs": "2.0.x"

@@ -31,17 +31,16 @@ const argv = require('yargs')
     .argv;
 const Logger = require('@rdcl/logger');
 
+const appFactory = require('./appFactory');
 const getConfig = require('./config').get;
 
 
 /**
  * Starts the server.
  *
- * @param {String} options.app      The location of the app.
- * @param {String} options.settings The location of the settings.
- * @param {String} options.logDir   The directory to log to when logging to files.
+ * @param {String} baseDir  The root folder.
  */
-exports = module.exports = function server(options) {
+exports = module.exports = function server(baseDir, initialize) {
     co(function* () {
         let environment = argv['environment'];
 
@@ -55,7 +54,7 @@ exports = module.exports = function server(options) {
             secrets = ['Keyboard cat'];
         }
 
-        let config = yield getConfig(options.settings, environment);
+        let config = yield getConfig(path.join(baseDir, 'settings'), environment);
 
         let logLevel = Logger.levels[argv['logLevel'].toUpperCase()];
         if (logLevel == null) {
@@ -63,12 +62,12 @@ exports = module.exports = function server(options) {
             process.exit(1);
         }
 
-        let app = require(options.app).init({
+        let app = appFactory(initialize).init({
+            baseDir,
             config,
             environment,
             secrets,
             logLevel,
-            logDir: options.logDir,
             serverInfo: {
                 host: argv['host'],
                 port: argv['port'],
