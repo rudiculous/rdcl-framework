@@ -12,7 +12,7 @@ const argv = require('yargs')
         'type': 'string',
     })
     .option('port', {
-        'default': 3000,
+        'default': process.env.PORT || 3000,
         'describe': 'The port to listen on.',
     })
     .option('environment', {
