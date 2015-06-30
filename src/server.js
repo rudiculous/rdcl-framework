@@ -45,6 +45,13 @@ exports = module.exports = function server(baseDir, initialize) {
         let environment = argv['environment'];
 
         let secrets = argv['secret'];
+
+        if (secrets == null && process.env.SECRET != null) {
+            // FIXME: See if it is possible to pass multiple secrets
+            // through environment variables.
+            secrets = [process.env.SECRET];
+        }
+
         if (secrets == null) {
             if (environment === 'production') {
                 console.error(chalk.red('Refusing to start a production server without at least one secret!'));
