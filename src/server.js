@@ -7,7 +7,7 @@ const chalk = require('chalk');
 const argv = require('yargs')
     .help('help', 'Shows this message.')
     .option('host', {
-        'default': 'localhost',
+        'default': process.env.HOST || 'localhost',
         'describe': 'The host to listen on.',
         'type': 'string',
     })
@@ -24,7 +24,7 @@ const argv = require('yargs')
         'type': 'array',
     })
     .option('logLevel', {
-        'default': 'warning',
+        'default': process.env.LOGLEVEL || 'warning',
         'describe': 'The application log level.',
         'type': 'string',
     })
