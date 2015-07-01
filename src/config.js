@@ -27,8 +27,12 @@ exports.get = function get(settingsDir, environment) {
             if (err) return reject(err);
 
             let config = yaml.load(data);
-            Object.freeze(config);
 
+            if (config.db && config.db.connection == null) {
+                config.db.connection = process.env.DATABASE_URL;
+            }
+
+            Object.freeze(config);
             resolve(config);
         });
     });
