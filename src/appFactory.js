@@ -37,6 +37,8 @@ exports = module.exports = function appFactory(initialize) {
      * @param {Object}   options.serverInfo     An object containing the host
      *                                          and port on which the server
      *                                          will be running.
+     * @param {Object}   options.database       The database connection.
+     * @param {Object}   options.orm            The ORM object.
      * @return {koa} A Koa instance.
      */
     function init(options) {
@@ -57,6 +59,30 @@ exports = module.exports = function appFactory(initialize) {
                 enumerable: true,
                 value: options.config,
             });
+
+            if (options.database != null) {
+                Object.defineProperty(app.context, 'database', {
+                    enumerable: true,
+                    value: options.database,
+                });
+
+                Object.defineProperty(app, 'database', {
+                    enumerable: true,
+                    value: options.database,
+                });
+            }
+
+            if (options.orm != null) {
+                Object.defineProperty(app.context, 'orm', {
+                    enumerable: true,
+                    value: options.orm,
+                });
+
+                Object.defineProperty(app, 'orm', {
+                    enumerable: true,
+                    value: options.orm,
+                });
+            }
 
             appComponents.logger(app, options.logLevel);
             let logDir = path.join(options.baseDir, 'var', 'log');

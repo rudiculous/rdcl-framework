@@ -1,6 +1,6 @@
 {
   "name": "@rdcl/framework",
-  "version": "0.1.6",
+  "version": "0.2.7",
   "description": "A web framework based on Koa.",
   "main": "index.js",
   "scripts": {
@@ -18,9 +18,11 @@
   "homepage": "https://github.com/rudiculous/rdcl-framework#readme",
   "dependencies": {
     "@rdcl/logger": "~1.0.x",
+    "bookshelf": "^0.8.1",
     "chalk": "~1.0.x",
     "co": "~4.5.x",
     "js-yaml": "~3.3.x",
+    "knex": "^0.8.6",
     "koa": "~0.21.x",
     "koa-bodyparser": "~2.0.x",
     "koa-router": "~5.0.x",
@@ -30,6 +32,6 @@
     "yargs": "~3.10.x"
   },
   "engines": {
-    "iojs": "2.0.x"
+    "iojs": "2.x.x"
   }
 }

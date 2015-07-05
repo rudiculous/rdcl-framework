@@ -63,6 +63,15 @@ exports = module.exports = function server(baseDir, initialize) {
 
         let config = yield getConfig(path.join(baseDir, 'settings'), environment);
 
+        let database;
+        let orm;
+        if (config.db) {
+            let res = yield require('./database').init(config.db);
+
+            database = res.database;
+            orm = res.orm;
+        }
+
         let logLevel = Logger.levels[argv['logLevel'].toUpperCase()];
         if (logLevel == null) {
             console.error(chalk.red('Invalid log level provided.'));
@@ -79,6 +88,8 @@ exports = module.exports = function server(baseDir, initialize) {
                 host: argv['host'],
                 port: argv['port'],
             },
+            database,
+            orm,
         });
 
         let server = app.listen(argv['port'], argv['host'], function startUp() {
