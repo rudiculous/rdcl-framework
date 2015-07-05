@@ -78,7 +78,7 @@ exports = module.exports = function modulesFactory(attachModules, dirname) {
 
         function use(module) {
             let args = Array.prototype.slice.call(arguments, 1);
-            require(path.join(dirname, module)).apply(context, args);
+            require(path.join(dirname, module)).module.apply(context, args);
         }
 
         function renderTemplate(template) {
