@@ -89,6 +89,7 @@ exports = module.exports = function appFactory(initialize) {
             app.use(appComponents.accessLog(logDir, options.config.accessLog));
             app.use(bodyParser());
             appComponents.templateParser(options.baseDir, app);
+            appComponents.assets(app, options.baseDir);
             appComponents.serverInfo(app, options.serverInfo);
 
             // Additional initialization.
