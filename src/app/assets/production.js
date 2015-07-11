@@ -36,7 +36,7 @@ exports.serve = function serve(baseDir) {
     const sendOptions = {
         gzip: true,
         hidden: false,
-        maxage: ms('2 weeks'),
+        maxage: ms('20 days'),
         root: assetsDir,
     };
 
