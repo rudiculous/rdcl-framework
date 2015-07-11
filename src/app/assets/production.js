@@ -11,10 +11,11 @@ const helpers = require('./helpers');
 exports.construct = function* construct(app, baseDir) {
     const assetsDir = path.join(baseDir, 'public', 'assets');
     const manifest = require(path.join(assetsDir, 'manifest.json'));
+    const staticBase = app.locals.staticBase;
 
     app.locals.add_javascript_tag = function addJavaScriptTag(file) {
         if (manifest[file] != null) {
-            return helpers.tags.html`<script type="text/javascript" src="/assets/${manifest[file]}"></script>\n`;
+            return helpers.tags.html`<script type="text/javascript" src="${staticBase}assets/${manifest[file]}"></script>\n`;
         }
         else {
             return '';
@@ -23,7 +24,7 @@ exports.construct = function* construct(app, baseDir) {
 
     app.locals.add_stylesheet_link = function addStylesheetLink(file) {
         if (manifest[file] != null) {
-            return helpers.tags.html`<link rel="stylesheet" type="text/css" href="/assets/${manifest[file]}"></script>\n`;
+            return helpers.tags.html`<link rel="stylesheet" type="text/css" href="${staticBase}assets/${manifest[file]}"></script>\n`;
         }
         else {
             return '';
