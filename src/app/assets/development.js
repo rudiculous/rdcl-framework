@@ -106,6 +106,10 @@ exports.serve = function serve(baseDir) {
                             less.render(data, {
                                 paths: importDirs,
                                 compress: false,
+                                globalVars: {
+                                    assetBaseUrl: `"/assets/"`,
+                                    mediaBaseUrl: `"${context.mediaBaseUrl}"`,
+                                },
                             }, function (err, parsed) {
                                 if (err) {
                                     context.app.logger.warning('Failed to parse less:', err);

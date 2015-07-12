@@ -11,14 +11,21 @@ const less = require('less');
 const UglifyJS = require('uglify-js');
 const yaml = require('js-yaml');
 
+const config = require('../../config');
+
 
 const regExpEscapeRE = /[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g;
+let settingsPromise = new Promise(function executor(resolve) {
+    resolve(null);
+});
 
 let helpers = exports = module.exports = {
     build(baseDir) {
         const assetsPublicDir = path.join(baseDir, 'public', 'assets');
         const appAssetsDir = path.join(baseDir, 'app', 'assets');
         const vendorAssetsDir = path.join(baseDir, 'vendor', 'assets');
+
+        settingsPromise = config.get(path.join(baseDir, 'settings'), 'production');
 
         return co(function* () {
             let manifest = yield helpers.loadManifest(
@@ -302,6 +309,7 @@ function _readFile(file) {
 
 function _readFileLess(paths, file) {
     return co(function* () {
+        let settings = yield settingsPromise;
         let data = yield _readFile(file);
 
         let assetPath = null;
@@ -327,6 +335,10 @@ function _readFileLess(paths, file) {
         let parsed = yield less.render(data, {
             paths: importDirs,
             compress: true,
+            globalVars: {
+                assetBaseUrl: `"${settings.mediaBaseUrl}assets/"`,
+                mediaBaseUrl: `"${settings.mediaBaseUrl}"`,
+            },
         });
 
         return parsed;
