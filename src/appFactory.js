@@ -60,6 +60,19 @@ exports = module.exports = function appFactory(initialize) {
                 value: options.config,
             });
 
+            let mediaBaseUrl = options.config.mediaBaseUrl;
+            if (mediaBaseUrl == null) {
+                mediaBaseUrl = '/';
+            }
+            Object.defineProperty(app.context, 'mediaBaseUrl', {
+                enumerable: true,
+                value: mediaBaseUrl,
+            });
+            Object.defineProperty(app, 'mediaBaseUrl', {
+                enumerable: true,
+                value: mediaBaseUrl,
+            });
+
             if (options.database != null) {
                 Object.defineProperty(app.context, 'database', {
                     enumerable: true,

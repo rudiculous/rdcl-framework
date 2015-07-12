@@ -28,9 +28,13 @@ exports = module.exports = function templateParser(root, app) {
         'moment': moment,
     };
 
-    Object.keys(app.config.template).forEach(function (key) {
-        locals[key] = app.config.template[key];
-    });
+    if (app.config.template != null) {
+        Object.keys(app.config.template).forEach(function (key) {
+            locals[key] = app.config.template[key];
+        });
+    }
+
+    locals.mediaBaseUrl = app.mediaBaseUrl;
 
     let props = {
         enumerable: true,
