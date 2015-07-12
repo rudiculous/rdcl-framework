@@ -303,9 +303,29 @@ function _readFile(file) {
 function _readFileLess(paths, file) {
     return co(function* () {
         let data = yield _readFile(file);
+
+        let assetPath = null;
+        for (let dir of paths) {
+            if (file.startsWith(dir)) {
+                assetPath = file.substring(dir.length);
+                break;
+            }
+        }
+        if (assetPath == null) {
+            console.warn('Could not match %s to one of [%s].', file, paths.join(', '));
+            assetPath = file;
+        }
+
+        let importDirs = [];
+        for (let dir of paths) {
+            importDirs.push(path.dirname(path.join(dir, assetPath)));
+        }
+        for (let dir of paths) {
+            importDirs.push(dir);
+        }
+
         let parsed = yield less.render(data, {
-            paths: paths,
-            filename: file,
+            paths: importDirs,
             compress: true,
         });
 

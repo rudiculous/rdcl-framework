@@ -95,12 +95,16 @@ exports.serve = function serve(baseDir) {
                             resolve(null);
                         }
                         else {
-                            let importPaths = assetDirs.slice(0);
-                            importPaths.unshift(path.dirname(fullPath));
+                            let importDirs = [];
+                            for (let dir of assetDirs) {
+                                importDirs.push(path.dirname(path.join(dir, assetPath)));
+                            }
+                            for (let dir of assetDirs) {
+                                importDirs.push(dir);
+                            }
 
                             less.render(data, {
-                                paths: importPaths,
-                                filename: assetPath,
+                                paths: importDirs,
                                 compress: false,
                             }, function (err, parsed) {
                                 if (err) {
@@ -108,6 +112,7 @@ exports.serve = function serve(baseDir) {
                                     resolve(null);
                                 }
                                 else {
+                                    //context.app.logger.finest(parsed.imports);
                                     resolve(parsed.css);
                                 }
                             });
