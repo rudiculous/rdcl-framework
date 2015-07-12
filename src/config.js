@@ -28,6 +28,10 @@ exports.get = function get(settingsDir, environment) {
 
             let config = yaml.load(data);
 
+            if (config.mediaBaseUrl == null) {
+                config.mediaBaseUrl = '/';
+            }
+
             if (config.db && config.db.connection == null) {
                 config.db.connection = process.env.DATABASE_URL;
             }

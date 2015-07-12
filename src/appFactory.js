@@ -50,52 +50,33 @@ exports = module.exports = function appFactory(initialize) {
             app.env = options.environment;
             app.keys = options.secrets;
 
-            Object.defineProperty(app.context, 'config', {
-                enumerable: true,
-                value: options.config,
-            });
-
-            Object.defineProperty(app, 'config', {
-                enumerable: true,
-                value: options.config,
-            });
-
-            let mediaBaseUrl = options.config.mediaBaseUrl;
-            if (mediaBaseUrl == null) {
-                mediaBaseUrl = '/';
-            }
-            Object.defineProperty(app.context, 'mediaBaseUrl', {
-                enumerable: true,
-                value: mediaBaseUrl,
-            });
-            Object.defineProperty(app, 'mediaBaseUrl', {
-                enumerable: true,
-                value: mediaBaseUrl,
-            });
+            let appProperties = {
+                'config': {
+                    enumerable: true,
+                    value: options.config,
+                },
+                'mediaBaseUrl': {
+                    enumerable: true,
+                    value: options.config.mediaBaseUrl,
+                },
+            };
 
             if (options.database != null) {
-                Object.defineProperty(app.context, 'database', {
+                appProperties.database = {
                     enumerable: true,
                     value: options.database,
-                });
-
-                Object.defineProperty(app, 'database', {
-                    enumerable: true,
-                    value: options.database,
-                });
+                };
             }
 
             if (options.orm != null) {
-                Object.defineProperty(app.context, 'orm', {
+                appProperties.orm = {
                     enumerable: true,
                     value: options.orm,
-                });
-
-                Object.defineProperty(app, 'orm', {
-                    enumerable: true,
-                    value: options.orm,
-                });
+                };
             }
+
+            Object.defineProperties(app.context, appProperties);
+            Object.defineProperties(app, appProperties);
 
             appComponents.logger(app, options.logLevel);
             let logDir = path.join(options.baseDir, 'var', 'log');
