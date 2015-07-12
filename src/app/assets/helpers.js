@@ -8,6 +8,7 @@ const zlib = require('zlib');
 const co = require('co');
 const glob = require('glob');
 const less = require('less');
+const ncp = require('ncp');
 const UglifyJS = require('uglify-js');
 const yaml = require('js-yaml');
 
@@ -34,6 +35,13 @@ let helpers = exports = module.exports = {
                 false
             );
 
+            let staticPromises = []
+            if (manifest['static'] != null) {
+                for (let file of manifest['static']) {
+                    staticPromises.push(_copyRecursive(file));
+                }
+            }
+
             let promises = [];
 
             for (let file of Object.keys(manifest.javascripts)) {
@@ -54,7 +62,47 @@ let helpers = exports = module.exports = {
             }
 
             yield _writeFile(path.join(assetsPublicDir, 'manifest.json'), JSON.stringify(newManifest), false);
+
+            // Wait for the static files to finish copying.
+            yield Promise.all(staticPromises);
         });
+
+        function _copyRecursive(file) {
+            let assetDirs = [appAssetsDir, vendorAssetsDir];
+
+            return new Promise(function executor(resolve, reject) {
+                glob('{' + assetDirs.join(',') + '}/' + file, function (err, files) {
+                    if (err || files.length < 1) {
+                        console.warn('Failed to resolve glob:', err);
+                        resolve();
+                    }
+                    else {
+                        let fullPath = files[0];
+                        let target = path.join(assetsPublicDir, file);
+                        let targetDir = path.dirname(target);
+
+                        fs.mkdir(targetDir, function (err) {
+                            if (err && err.code !== 'EEXIST') {
+                                console.warn('Failed to create directory %s:', targetDir, err);
+                                resolve();
+                            }
+                            else {
+                                ncp(fullPath, target, function (err) {
+                                    if (err) {
+                                        console.warn('Failed to copy %s:', file, err);
+                                    }
+                                    else {
+                                        console.log('Successfully copied %s', file);
+                                    }
+
+                                    resolve();
+                                });
+                            }
+                        });
+                    }
+                });
+            });
+        }
 
         function _buildJavascript(asset, files) {
             return new Promise(function executor(resolve, reject) {
