@@ -7,6 +7,7 @@ const koa = require('koa');
 const serve = require('koa-static');
 
 const appComponents = require('./app');
+const appMiddleware = require('./app/middleware');
 
 
 /**
@@ -85,6 +86,8 @@ exports = module.exports = function appFactory(initialize) {
             appComponents.templateParser(options.baseDir, app);
             appComponents.assets(app, options.baseDir);
             appComponents.serverInfo(app, options.serverInfo);
+
+            app.use(appMiddleware.staticFiles(options.baseDir));
 
             // Additional initialization.
             if (initialize != null) {
